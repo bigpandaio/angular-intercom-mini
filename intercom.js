@@ -45,14 +45,12 @@
             var deferred = $q.defer();
             $window.Intercom = intercomBootstrap();
             var firstIntercom = $window.Intercom;
-            var onScriptLoad = function() {
-              $interval(function(){
-                if($window.Intercom !== firstIntercom) {
-                  deferred.resolve($window.Intercom);
-                  $interval.cancel(onScriptLoad);
-                }
-              },200);
-            };
+            var onScriptLoad = $interval(function(){
+              if($window.Intercom !== firstIntercom) {
+                deferred.resolve($window.Intercom);
+                $interval.cancel(onScriptLoad);
+              }
+            },200);
             createScript($document[0], appId, onScriptLoad);
             return deferred.promise;
           }
